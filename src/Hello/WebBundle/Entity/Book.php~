@@ -1,0 +1,54 @@
+<?php
+
+namespace Hello\WebBundle\Entity;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\ManyToOne;
+
+/**
+ * @ORM\Entity(repositoryClass="BookRepository")
+ * @ORM\Table(name="book")
+ */
+class Book{
+
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $title;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    protected $price;
+
+
+    /**
+     * @ManyToMany(targetEntity="User",inversedBy="books")
+     * @JoinTable(name="users_books")
+     */
+    private $users;
+
+    /**
+     * @ManyToOne(targetEntity="Author",inversedBy="books")
+     * @JoinColumn(name="author_id",referencedColumnName="id")
+     */
+    private $author;
+
+
+    /**
+     * @ManyToMany(targetEntity="Category",inversedBy="books")
+     * @JoinTable(name="categories_books")
+     */
+    private $categories;
+    
+}

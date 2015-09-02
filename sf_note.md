@@ -10,53 +10,52 @@ $this->createAt = new \DateTime();
 建议写一个PrePersist()方法
 
 ```php
-    /**
-     * @ORM\PrePersist()
-     */
-    public function PrePersist(){
+/**
+ * @ORM\PrePersist()
+ */
+public function PrePersist(){
 
-        if($this->getCreateAt() == null){
-            $this->setCreateAt(new \DateTime('now'));
-        }
-        $this->setUpdateAt(new \DateTime('now'));
-
+    if($this->getCreateAt() == null){
+        $this->setCreateAt(new \DateTime('now'));
     }
+    $this->setUpdateAt(new \DateTime('now'));
 
-    /**
-     * @ORM\PreUpdate()
-     */
-    public function PreUpdate(){
-        $this->setUpdateAt(new \DateTime('now'));
-    }
+}
+
+/**
+ * @ORM\PreUpdate()
+ */
+public function PreUpdate(){
+    $this->setUpdateAt(new \DateTime('now'));
+}
 ```
 
-Doctrine 10.2 列举了所有操作的时间点
+在Doctrine的文档10.2章节中列举了所有操作的时间点
 
 10-6
-每次更新数据之前，建议 --dump-sql一下看看是否是需要更详细的，
-避免把原来的数据删除了
-操作
+每次更新数据之前，建议 --dump-sql一下看看是否是需要更详细的，避免把原来的数据删除了
+
+
+课程演示操作
 1. 新增一本书
 2. 更新书2的价格
 
-
-@ORM\PreUpdate()
-是更新之前做的事情
+@ORM\PreUpdate()是更新之前做的事情
 
 ```php
-  	$em = $this->getDoctrine()->getManager();
-        //新增一本书，并且修改"程序思维"这本书的价格
-        /** @var  $book2 \Hello\WebBundle\Entity\Book */
-        $book2 = $this->getBookRepository()->findOneBy(array('title'=>'程序员思维'));
-        $book2->setPrice(30);
+$em = $this->getDoctrine()->getManager();
+//新增一本书，并且修改"程序思维"这本书的价格
+/** @var  $book2 \Hello\WebBundle\Entity\Book */
+$book2 = $this->getBookRepository()->findOneBy(array('title'=>'程序员思维'));
+$book2->setPrice(30);
 
 
-        $newBook = new Book();
-        $newBook->setTitle("PHP Mysql权威指南")->setPrice(98.00);
+$newBook = new Book();
+$newBook->setTitle("PHP Mysql权威指南")->setPrice(98.00);
 
-        $em->persist($book2);
-        $em->persist($newBook);
-        $em->flush();
+$em->persist($book2);
+$em->persist($newBook);
+$em->flush();
 ```
 
 10-7
@@ -81,27 +80,27 @@ $this->get('database_connection')->fetchAll(sql);
 
 ###10-9 手动控制事务
 ```php
-	$em = $this->getDoctrine()->getManager();
-        $em->getConnection()->beginTransaction();
+$em = $this->getDoctrine()->getManager();
+$em->getConnection()->beginTransaction();
 
-        try{
+try{
 
-            //新增一本书，并且修改"程序思维"这本书的价格
-            /** @var  $book2 \Hello\WebBundle\Entity\Book */
-            $book2 = $this->getBookRepository()->findOneBy(array('title'=>'程序员思维'));
-            $book2->setPrice(35);
+    //新增一本书，并且修改"程序思维"这本书的价格
+    /** @var  $book2 \Hello\WebBundle\Entity\Book */
+    $book2 = $this->getBookRepository()->findOneBy(array('title'=>'程序员思维'));
+    $book2->setPrice(35);
 
 
-            $newBook = new Book();
-            $newBook->setTitle("PHP Mysql权威指南")->setPrice(99.00);
+    $newBook = new Book();
+    $newBook->setTitle("PHP Mysql权威指南")->setPrice(99.00);
 
-            $em->persist($book2);
-            $em->persist($newBook);
-            $em->flush();
-            $em->getConnection()->commit();
-        }catch (Exception $e){
-            $em->getConnection()->rollback();
-        }
+    $em->persist($book2);
+    $em->persist($newBook);
+    $em->flush();
+    $em->getConnection()->commit();
+}catch (Exception $e){
+    $em->getConnection()->rollback();
+}
 ```
 
 ###10-10
@@ -141,6 +140,7 @@ C
 
 
 Model
+
 1. 真实存在的存放在数据库中的数据
 2. 虚拟的数据模型： 如:搜索框
 
@@ -157,24 +157,24 @@ Model
 action code
 
 ```
-	$user = new User();
-        $form = $this->createFormBuilder($user)
-                ->add('email')
-                ->add('password')
-                ->add('age')
-                ->add('Submit','submit')
-                ->getForm();
-        //处理form的轻轻
-        $form->handleRequest($this->getRequest());
+$user = new User();
+$form = $this->createFormBuilder($user)
+        ->add('email')
+        ->add('password')
+        ->add('age')
+        ->add('Submit','submit')
+        ->getForm();
+//处理form的轻轻
+$form->handleRequest($this->getRequest());
 
-        //假如表单验证成功
-        if($form->isValid()){
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-        }
-        
-        return array('name' => 'a','form'=>$form->createView());
+//假如表单验证成功
+if($form->isValid()){
+    $em = $this->getDoctrine()->getManager();
+    $em->persist($user);
+    $em->flush();
+}
+
+return array('name' => 'a','form'=>$form->createView());
 ```
 
 在views里面`{{ form($form) }}` 使用twing中的form方法显示form变量
@@ -185,28 +185,30 @@ action code
 表单嵌套
 ```
 $user = new User();
-        $builder = $this->createFormBuilder($user);
-        $form = $builder
-                ->add('email')
-                ->add('password')
-                ->add('age')
-                ->add(
-                    $builder->create('profile','form')
-                        ->add('phone_number','integer')
-                )
-                ->add('Submit','submit')
-                ->getForm();
-        //处理form的轻轻
-        $form->handleRequest($this->getRequest());
+$builder = $this->createFormBuilder($user);
+$form = $builder
+        ->add('email')
+        ->add('password')
+        ->add('age')
+        ->add(
+            $builder->create('profile','form')
+                ->add('phone_number','integer')
+        )
+        ->add('Submit','submit')
+        ->getForm();
+//处理form的轻轻
+$form->handleRequest($this->getRequest());
 
-        //假如表单验证成功
-        if($form->isValid()){
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-        }
+//假如表单验证成功
+if($form->isValid()){
+    $em = $this->getDoctrine()->getManager();
+    $em->persist($user);
+    $em->flush();
+}
 
-        return array('name' => 'a','form'=>$form->createView());
+return array('name' => 'a','form'=>$form->createView());
 ```
 字段类型源码在:`vendor/symfony/symfony/src/Component/Form/Extension/Core/Type`
+
+
 显示Form字段的模板在: `vendor/symfony/symfony/src/Symfony/Bridge/Twig/Resources/view/Form`

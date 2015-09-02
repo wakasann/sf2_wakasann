@@ -27,6 +27,7 @@ class DefaultController extends Controller
     {
         $user = new User();
         $builder = $this->createFormBuilder($user);
+        //form中添加user对应的profile
         $form = $builder
                 ->add('email')
                 ->add('password')
@@ -37,7 +38,7 @@ class DefaultController extends Controller
                 )
                 ->add('Submit','submit')
                 ->getForm();
-        //处理form的轻轻
+        //处理form的请求
         $form->handleRequest($this->getRequest());
 
         //假如表单验证成功

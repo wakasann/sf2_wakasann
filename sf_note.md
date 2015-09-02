@@ -186,6 +186,7 @@ return array('name' => 'a','form'=>$form->createView());
 ```
 $user = new User();
 $builder = $this->createFormBuilder($user);
+//form中添加user对应的profile
 $form = $builder
         ->add('email')
         ->add('password')
@@ -196,7 +197,7 @@ $form = $builder
         )
         ->add('Submit','submit')
         ->getForm();
-//处理form的轻轻
+//处理form的请求
 $form->handleRequest($this->getRequest());
 
 //假如表单验证成功

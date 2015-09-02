@@ -30,4 +30,60 @@ class Profile{
     private $user;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set phone_number
+     *
+     * @param string $phoneNumber
+     * @return Profile
+     */
+    public function setPhoneNumber($phoneNumber)
+    {
+        $this->phone_number = $phoneNumber;
+    
+        return $this;
+    }
+
+    /**
+     * Get phone_number
+     *
+     * @return string 
+     */
+    public function getPhoneNumber()
+    {
+        return $this->phone_number;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Hello\WebBundle\Entity\User $user
+     * @return Profile
+     */
+    public function setUser(\Hello\WebBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+    
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Hello\WebBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 }

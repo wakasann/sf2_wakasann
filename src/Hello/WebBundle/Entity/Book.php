@@ -7,10 +7,12 @@ use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\JoinTable;
 use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 
 /**
  * @ORM\Entity(repositoryClass="BookRepository")
  * @ORM\Table(name="book")
+ * @ORM\HasLifecycleCallbacks
  */
 class Book{
 
@@ -30,6 +32,16 @@ class Book{
      * @ORM\Column(type="float")
      */
     protected $price;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    protected $createAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    protected $updateAt;
 
 
     /**
@@ -204,4 +216,70 @@ class Book{
     {
         return $this->categories;
     }
+
+    /**
+     * Set createAt
+     *
+     * @param \DateTime $createAt
+     * @return Book
+     */
+    public function setCreateAt($createAt)
+    {
+        $this->createAt = $createAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get createAt
+     *
+     * @return \DateTime 
+     */
+    public function getCreateAt()
+    {
+        return $this->createAt;
+    }
+
+    /**
+     * Set updateAt
+     *
+     * @param \DateTime $updateAt
+     * @return Book
+     */
+    public function setUpdateAt($updateAt)
+    {
+        $this->updateAt = $updateAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get updateAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdateAt()
+    {
+        return $this->updateAt;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function PrePersist(){
+
+        if($this->getCreateAt() == null){
+            $this->setCreateAt(new \DateTime('now'));
+        }
+        $this->setUpdateAt(new \DateTime('now'));
+
+    }
+
+    /**
+     * @ORM\PreUpdate()
+     */
+    public function PreUpdate(){
+        $this->setUpdateAt(new \DateTime('now'));
+    }
+
 }

@@ -12,4 +12,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class BookRepository extends EntityRepository
 {
+
+    /**
+     * @param $title 书的名称
+     * @return array
+     */
+    public function getAllVaildBookByTitle($title){
+        return $this->findBy(array('title'=>$title));
+    }
 }

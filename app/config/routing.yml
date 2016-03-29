@@ -1,5 +1,3 @@
-hello_web:
-    resource: "@HelloWebBundle/Controller/"
+app:
+    resource: "@AppBundle/Controller/"
     type:     annotation
-    prefix:   /
-
